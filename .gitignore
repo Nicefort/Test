@@ -1,0 +1,16 @@
+# Dossiers Node.js
+node_modules/
+
+
+# Fichiers journaux
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers spécifiques à l'OS
+.DS_Store
+Thumbs.db
+
+# Fichiers de compilation et de distribution
+dist/
+build/

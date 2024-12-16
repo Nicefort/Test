@@ -1,0 +1,871 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    To do list
+  </title>
+  <link rel="icon" href="{% static 'src/image/favicon.ico'%}">
+  <link href="{% static 'src/css/style.css'%}" rel="stylesheet">
+  <script
+    nonce="89867b79-8c9e-4e7a-acb6-ac2dbe98ef43">try { (function (w, d) { !function (j, k, l, m) { j[l] = j[l] || {}; j[l].executed = []; j.zaraz = { deferred: [], listeners: [] }; j.zaraz._v = "5671"; j.zaraz.q = []; j.zaraz._f = function (n) { return async function () { var o = Array.prototype.slice.call(arguments); j.zaraz.q.push({ m: n, a: o }) } }; for (const p of ["track", "set", "debug"]) j.zaraz[p] = j.zaraz._f(p); j.zaraz.init = () => { var q = k.getElementsByTagName(m)[0], r = k.createElement(m), s = k.getElementsByTagName("title")[0]; s && (j[l].t = k.getElementsByTagName("title")[0].text); j[l].x = Math.random(); j[l].w = j.screen.width; j[l].h = j.screen.height; j[l].j = j.innerHeight; j[l].e = j.innerWidth; j[l].l = j.location.href; j[l].r = k.referrer; j[l].k = j.screen.colorDepth; j[l].n = k.characterSet; j[l].o = (new Date).getTimezoneOffset(); if (j.dataLayer) for (const w of Object.entries(Object.entries(dataLayer).reduce(((x, y) => ({ ...x[1], ...y[1] })), {}))) zaraz.set(w[0], w[1], { scope: "page" }); j[l].q = []; for (; j.zaraz.q.length;) { const z = j.zaraz.q.shift(); j[l].q.push(z) } r.defer = !0; for (const A of [localStorage, sessionStorage]) Object.keys(A || {}).filter((C => C.startsWith("_zaraz_"))).forEach((B => { try { j[l]["z_" + B.slice(7)] = JSON.parse(A.getItem(B)) } catch { j[l]["z_" + B.slice(7)] = A.getItem(B) } })); r.referrerPolicy = "origin"; r.src = "cdn-cgi/zaraz/sd0d9.js?z=" + btoa(encodeURIComponent(JSON.stringify(j[l]))); q.parentNode.insertBefore(r, q) };["complete", "interactive"].includes(k.readyState) ? zaraz.init() : j.addEventListener("DOMContentLoaded", zaraz.init) }(w, d, "zarazData", "script"); })(window, document) } catch (e) { throw fetch("/cdn-cgi/zaraz/t"), e; };</script>
+</head>
+
+<body
+  x-data="{ page: 'kanban', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+  x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+  :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
+  <!-- ===== Preloader Start ===== -->
+  <div x-show="loaded"
+    x-init="window.addEventListener('DOMContentLoaded', () => {setTimeout(() => loaded = false, 500)})"
+    class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white dark:bg-black">
+    <div class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
+  </div>
+
+  <!-- ===== Preloader End ===== -->
+
+  <!-- ===== Page Wrapper Start ===== -->
+  <div class="flex h-screen overflow-hidden">
+    <!-- ===== Sidebar Start ===== -->
+
+
+    <!-- ===== Sidebar End ===== -->
+
+    <!-- ===== Content Area Start ===== -->
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <!-- ===== Header Start ===== -->
+
+
+      <!-- ===== Header End ===== -->
+
+      <!-- ===== Main Content Start ===== -->
+      <main>
+        <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+          <div class="mx-auto max-w-5xl">
+            <!-- Breadcrumb Start -->
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 class="text-title-md2 font-bold text-black dark:text-white">
+                Nicefort KETTEGUIA
+              </h2>
+
+              <nav>
+                <ol class="flex items-center gap-2">
+
+                  <li>
+                    <!-- Dark Mode Toggler -->
+                    <label :class="darkMode ? 'bg-primary' : 'bg-stroke'"
+                      class="relative m-0 block h-7.5 w-14 rounded-full">
+                      <input type="checkbox" :value="darkMode" @change="darkMode = !darkMode"
+                        class="absolute top-0 z-50 m-0 h-full w-full cursor-pointer opacity-0" />
+                      <span :class="darkMode && '!right-1 !translate-x-full'"
+                        class="absolute left-1 top-1/2 flex h-6 w-6 -translate-y-1/2 translate-x-0 items-center justify-center rounded-full bg-white shadow-switcher duration-75 ease-linear">
+                        <span class="dark:hidden">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M7.99992 12.6666C10.5772 12.6666 12.6666 10.5772 12.6666 7.99992C12.6666 5.42259 10.5772 3.33325 7.99992 3.33325C5.42259 3.33325 3.33325 5.42259 3.33325 7.99992C3.33325 10.5772 5.42259 12.6666 7.99992 12.6666Z"
+                              fill="#969AA1" />
+                            <path
+                              d="M8.00008 15.3067C7.63341 15.3067 7.33342 15.0334 7.33342 14.6667V14.6134C7.33342 14.2467 7.63341 13.9467 8.00008 13.9467C8.36675 13.9467 8.66675 14.2467 8.66675 14.6134C8.66675 14.9801 8.36675 15.3067 8.00008 15.3067ZM12.7601 13.4267C12.5867 13.4267 12.4201 13.3601 12.2867 13.2334L12.2001 13.1467C11.9401 12.8867 11.9401 12.4667 12.2001 12.2067C12.4601 11.9467 12.8801 11.9467 13.1401 12.2067L13.2267 12.2934C13.4867 12.5534 13.4867 12.9734 13.2267 13.2334C13.1001 13.3601 12.9334 13.4267 12.7601 13.4267ZM3.24008 13.4267C3.06675 13.4267 2.90008 13.3601 2.76675 13.2334C2.50675 12.9734 2.50675 12.5534 2.76675 12.2934L2.85342 12.2067C3.11342 11.9467 3.53341 11.9467 3.79341 12.2067C4.05341 12.4667 4.05341 12.8867 3.79341 13.1467L3.70675 13.2334C3.58008 13.3601 3.40675 13.4267 3.24008 13.4267ZM14.6667 8.66675H14.6134C14.2467 8.66675 13.9467 8.36675 13.9467 8.00008C13.9467 7.63341 14.2467 7.33342 14.6134 7.33342C14.9801 7.33342 15.3067 7.63341 15.3067 8.00008C15.3067 8.36675 15.0334 8.66675 14.6667 8.66675ZM1.38675 8.66675H1.33341C0.966748 8.66675 0.666748 8.36675 0.666748 8.00008C0.666748 7.63341 0.966748 7.33342 1.33341 7.33342C1.70008 7.33342 2.02675 7.63341 2.02675 8.00008C2.02675 8.36675 1.75341 8.66675 1.38675 8.66675ZM12.6734 3.99341C12.5001 3.99341 12.3334 3.92675 12.2001 3.80008C11.9401 3.54008 11.9401 3.12008 12.2001 2.86008L12.2867 2.77341C12.5467 2.51341 12.9667 2.51341 13.2267 2.77341C13.4867 3.03341 13.4867 3.45341 13.2267 3.71341L13.1401 3.80008C13.0134 3.92675 12.8467 3.99341 12.6734 3.99341ZM3.32675 3.99341C3.15341 3.99341 2.98675 3.92675 2.85342 3.80008L2.76675 3.70675C2.50675 3.44675 2.50675 3.02675 2.76675 2.76675C3.02675 2.50675 3.44675 2.50675 3.70675 2.76675L3.79341 2.85342C4.05341 3.11342 4.05341 3.53341 3.79341 3.79341C3.66675 3.92675 3.49341 3.99341 3.32675 3.99341ZM8.00008 2.02675C7.63341 2.02675 7.33342 1.75341 7.33342 1.38675V1.33341C7.33342 0.966748 7.63341 0.666748 8.00008 0.666748C8.36675 0.666748 8.66675 0.966748 8.66675 1.33341C8.66675 1.70008 8.36675 2.02675 8.00008 2.02675Z"
+                              fill="#969AA1" />
+                          </svg>
+                        </span>
+                        <span class="hidden dark:inline-block">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M14.3533 10.62C14.2466 10.44 13.9466 10.16 13.1999 10.2933C12.7866 10.3667 12.3666 10.4 11.9466 10.38C10.3933 10.3133 8.98659 9.6 8.00659 8.5C7.13993 7.53333 6.60659 6.27333 6.59993 4.91333C6.59993 4.15333 6.74659 3.42 7.04659 2.72666C7.33993 2.05333 7.13326 1.7 6.98659 1.55333C6.83326 1.4 6.47326 1.18666 5.76659 1.48C3.03993 2.62666 1.35326 5.36 1.55326 8.28666C1.75326 11.04 3.68659 13.3933 6.24659 14.28C6.85993 14.4933 7.50659 14.62 8.17326 14.6467C8.27993 14.6533 8.38659 14.66 8.49326 14.66C10.7266 14.66 12.8199 13.6067 14.1399 11.8133C14.5866 11.1933 14.4666 10.8 14.3533 10.62Z"
+                              fill="#969AA1" />
+                          </svg>
+                        </span>
+                      </span>
+                    </label>
+
+                  </li>
+                </ol>
+              </nav>
+            </div>
+
+
+            <div
+              class="flex flex-col gap-y-4 rounded-sm border border-stroke bg-white p-3 shadow-default dark:border-strokedark dark:bg-boxdark sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 class="text-title-lg font-bold text-black dark:text-white">
+                  To Do List
+                </h3>
+              </div>
+              <div class="flex flex-col gap-4 2xsm:flex-row 2xsm:items-center">
+
+
+                <div x-data="{popupOpen: false}">
+                  <button @click="popupOpen = true"
+                    class="flex items-center gap-2 rounded bg-primary px-4.5 py-2 font-medium text-white hover:bg-opacity-80">
+                    <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M15 7H9V1C9 0.4 8.6 0 8 0C7.4 0 7 0.4 7 1V7H1C0.4 7 0 7.4 0 8C0 8.6 0.4 9 1 9H7V15C7 15.6 7.4 16 8 16C8.6 16 9 15.6 9 15V9H15C15.6 9 16 8.6 16 8C16 7.4 15.6 7 15 7Z"
+                        fill="" />
+                    </svg>
+                    Ajouter une tache
+                  </button>
+
+
+
+                  <div x-show="popupOpen" x-transition
+                    class="fixed left-0 top-0 z-99999 flex h-screen w-full justify-center overflow-y-scroll bg-black/80 px-4 py-5">
+                    <div @click.outside="popupOpen = false"
+                      class="relative m-auto w-full max-w-180 rounded-sm border border-stroke bg-gray p-4 shadow-default dark:border-strokedark dark:bg-meta-4 sm:p-8 xl:p-10">
+                      <button @click="popupOpen = false" class="absolute right-1 top-1 sm:right-5 sm:top-5">
+                        <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.8913 9.99599L19.5043 2.38635C20.032 1.85888 20.032 1.02306 19.5043 0.495589C18.9768 -0.0317329 18.141 -0.0317329 17.6135 0.495589L10.0001 8.10559L2.38673 0.495589C1.85917 -0.0317329 1.02343 -0.0317329 0.495873 0.495589C-0.0318274 1.02306 -0.0318274 1.85888 0.495873 2.38635L8.10887 9.99599L0.495873 17.6056C-0.0318274 18.1331 -0.0318274 18.9689 0.495873 19.4964C0.717307 19.7177 1.05898 19.9001 1.4413 19.9001C1.75372 19.9001 2.13282 19.7971 2.40606 19.4771L10.0001 11.8864L17.6135 19.4964C17.8349 19.7177 18.1766 19.9001 18.5589 19.9001C18.8724 19.9001 19.2531 19.7964 19.5265 19.4737C20.0319 18.9452 20.0245 18.1256 19.5043 17.6056L11.8913 9.99599Z"
+                            fill="" />
+                        </svg>
+                      </button>
+
+                      <!-- Formulaire qui permet l'ajout d'une nouvelle tache  -->
+                      <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" name="create_task"
+                          class="flex w-full items-center justify-center gap-2 rounded bg-primary px-4.5 py-2.5 font-medium text-white mt-5">
+                          <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M15 7H9V1C9 0.4 8.6 0 8 0C7.4 0 7 0.4 7 1V7H1C0.4 7 0 7.4 0 8C0 8.6 0.4 9 1 9H7V15C7 15.6 7.4 16 8 16C8.6 16 9 15.6 9 15V9H15C15.6 9 16 8.6 16 8C16 7.4 15.6 7 15 7Z"
+                              fill="" />
+                          </svg>
+                          Ajouter la tache</button>
+                      </form>
+                      <!-- Fin de la formulaire -->
+
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+
+            <ul>
+              <div class="mt-9 grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
+                <!-- Todo list -->
+
+                <!-- Boucle for qui permet de lister toutes les taches qui sont dans la base de donnée-->
+
+                {% for task in tasks %}
+                <li>
+                  <div class="swim-lane flex flex-col gap-5.5">
+                    <h2 class="text-xl font-bold text-black dark:text-white">
+                      <!--Permet de compter toutes les taches existantes-->
+                      Tache {{ forloop.counter }}
+                    </h2>
+
+                    <div draggable="true "
+                      class="task relative flex cursor-move justify-between rounded-sm border border-stroke bg-white p-7 shadow-default dark:border-strokedark dark:bg-boxdark">
+                      <div>
+
+                        <h5 class="mb-4 text-lg font-medium text-black dark:text-white">
+
+
+                          <!--Cette condition permet d'afficher les titres des taches selon les priorité-->
+
+                          {% if task.priority == 'high' %}
+                          <strong style=" color:rgba(214, 91, 70, 0.856);">Title :{{ task.title }}</strong> 
+                          {% elif task.priority == 'medium' %}
+                          <strong style="color:rgb(30, 173, 25);">Title :{{ task.title }}</strong> 
+
+                          {% elif task.priority == 'low' %}
+                          <strong style="color:rgb(192, 55, 169);">Title :{{ task.title }}</strong> 
+
+                          {% endif %}
+
+                         
+
+                          <!--Condition pour afficher la date de fin de la tache-->
+
+                          {% if task.due_date %}
+                          <p>
+                          <div>
+                            <h4 class="mb-2 font-medium text-black dark:text-white">
+                              Date de fin prevue
+                            </h4>
+
+                            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
+
+                              <span class="flex items-center gap-1.5">
+                                <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M14 2.65002H12.7V2.10002C12.7 1.80002 12.45 1.52502 12.125 1.52502C11.8 1.52502 11.55 1.77502 11.55 2.10002V2.65002H4.42505V2.10002C4.42505 1.80002 4.17505 1.52502 3.85005 1.52502C3.52505 1.52502 3.27505 1.77502 3.27505 2.10002V2.65002H2.00005C1.15005 2.65002 0.425049 3.35002 0.425049 4.22502V12.925C0.425049 13.775 1.12505 14.5 2.00005 14.5H14C14.85 14.5 15.575 13.8 15.575 12.925V4.20002C15.575 3.35002 14.85 2.65002 14 2.65002ZM1.57505 7.30002H3.70005V9.77503H1.57505V7.30002ZM4.82505 7.30002H7.45005V9.77503H4.82505V7.30002ZM7.45005 10.9V13.35H4.82505V10.9H7.45005ZM8.57505 10.9H11.2V13.35H8.57505V10.9ZM8.57505 9.77503V7.30002H11.2V9.77503H8.57505ZM12.3 7.30002H14.425V9.77503H12.3V7.30002ZM2.00005 3.77502H3.30005V4.30002C3.30005 4.60002 3.55005 4.87502 3.87505 4.87502C4.20005 4.87502 4.45005 4.62502 4.45005 4.30002V3.77502H11.6V4.30002C11.6 4.60002 11.85 4.87502 12.175 4.87502C12.5 4.87502 12.75 4.62502 12.75 4.30002V3.77502H14C14.25 3.77502 14.45 3.97502 14.45 4.22502V6.17502H1.57505V4.22502C1.57505 3.97502 1.75005 3.77502 2.00005 3.77502ZM1.57505 12.9V10.875H3.70005V13.325H2.00005C1.75005 13.35 1.57505 13.15 1.57505 12.9ZM14 13.35H12.3V10.9H14.425V12.925C14.45 13.15 14.25 13.35 14 13.35Z"
+                                    fill="" />
+                                </svg>
+                                <!-- Affiche la date de fin de tache-->
+                                <span class="text-xs font-medium">{{ task.due_date|date:"Y-m-d" }}</span>
+                              </span>
+
+                              <span class="flex items-center gap-1.5">
+                                <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M8.57495 2.99999V1.57499H9.92495C10.225 1.57499 10.5 1.32499 10.5 0.999988C10.5 0.674988 10.25 0.424988 9.92495 0.424988H6.09995C5.79995 0.424988 5.52495 0.674988 5.52495 0.999988C5.52495 1.32499 5.77495 1.57499 6.09995 1.57499H7.44995V2.99999C4.22495 3.29999 1.69995 5.99999 1.69995 9.27499C1.69995 12.75 4.52495 15.575 7.99995 15.575C11.475 15.575 14.3 12.75 14.3 9.27499C14.3 5.99999 11.775 3.29999 8.57495 2.99999ZM7.99995 14.45C5.14995 14.45 2.82495 12.125 2.82495 9.27499C2.82495 6.42499 5.14995 4.09999 7.99995 4.09999C10.85 4.09999 13.175 6.42499 13.175 9.27499C13.175 12.125 10.85 14.45 7.99995 14.45Z"
+                                    fill="" />
+                                  <path
+                                    d="M11.1749 8.69996H8.5749V6.09996C8.5749 5.79996 8.3249 5.52496 7.9999 5.52496C7.6999 5.52496 7.4249 5.77496 7.4249 6.09996V8.72496H6.7249C6.4249 8.72496 6.1499 8.97496 6.1499 9.29996C6.1499 9.62496 6.3999 9.87496 6.7249 9.87496H7.4249V10.575C7.4249 10.875 7.6749 11.15 7.9999 11.15C8.2999 11.15 8.5749 10.9 8.5749 10.575V9.87496H11.1999C11.4999 9.87496 11.7749 9.62496 11.7749 9.29996C11.7749 8.97496 11.4999 8.69996 11.1749 8.69996Z"
+                                    fill="" />
+                                </svg>
+                                <!-- Affiche la l'heure de fin de tache-->
+                                <span class="text-xs font-medium">{{ task.due_date|date:"H\hi" }}</span>
+                              </span>
+
+                            </div>
+                          </div>
+
+                          </p>
+
+
+                          {% endif %}
+
+
+                          <!--Condition pour afficher l'etat ou le statut d'une tache-->
+                          {% if task.is_overdue and not task.completed%}
+                          <!-- Si le delai est depaser est la tache n'est pas encore fini (marquer comme fini) -->
+
+                          <p>
+                            <span style="color: red;">
+
+                              <div class="max-w-[222px] rounded-lg py-4 dark:">
+                                <div class="flex items-center justify-between">
+                                  <div class="flex flex-grow items-center gap-5">
+                                    <div
+                                      class="flex h-9 w-full max-w-9 items-center justify-center rounded-md bg-[#EA4E2C]">
+                                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M14.2021 3.33462C14.7513 3.02546 15.3708 2.86304 16.001 2.86304C16.6312 2.86304 17.2507 3.02546 17.7999 3.33462C18.349 3.64379 18.8092 4.08926 19.136 4.62807L19.1389 4.63282L30.4322 23.4862L30.4403 23.5C30.7605 24.0544 30.9299 24.683 30.9317 25.3233C30.9335 25.9635 30.7676 26.593 30.4505 27.1493C30.1335 27.7055 29.6763 28.169 29.1245 28.4937C28.5727 28.8184 27.9455 28.9929 27.3053 29L27.2943 29.0001L4.69668 29C4.05647 28.993 3.42928 28.8184 2.87748 28.4937C2.32568 28.169 1.86851 27.7055 1.55146 27.1493C1.23441 26.593 1.06853 25.9635 1.07033 25.3233C1.07212 24.683 1.24152 24.0544 1.56168 23.5L1.5698 23.4862L12.8631 4.63282L13.721 5.1467L12.866 4.62807C13.1928 4.08926 13.653 3.64379 14.2021 3.33462ZM14.5773 5.6632C14.5769 5.66391 14.5764 5.66462 14.576 5.66532L3.29013 24.5062C3.14689 24.7567 3.07113 25.0402 3.07032 25.3289C3.0695 25.6199 3.1449 25.906 3.28902 26.1589C3.43313 26.4117 3.64093 26.6224 3.89175 26.77C4.14117 26.9167 4.42447 26.996 4.71376 27H27.2882C27.5775 26.996 27.8608 26.9167 28.1103 26.77C28.3611 26.6224 28.5689 26.4117 28.713 26.1589C28.8571 25.906 28.9325 25.6199 28.9317 25.3289C28.9309 25.0402 28.8551 24.7567 28.7119 24.5062L17.426 5.66532C17.4256 5.66462 17.4251 5.66391 17.4247 5.6632C17.2762 5.41924 17.0676 5.21752 16.8187 5.07739C16.5691 4.93686 16.2875 4.86304 16.001 4.86304C15.7146 4.86304 15.4329 4.93686 15.1833 5.07739C14.9345 5.21752 14.7258 5.41924 14.5773 5.6632Z"
+                                          fill="white" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M16 11C16.5523 11 17 11.4477 17 12V17.3333C17 17.8856 16.5523 18.3333 16 18.3333C15.4477 18.3333 15 17.8856 15 17.3333V12C15 11.4477 15.4477 11 16 11Z"
+                                          fill="white" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M15 22.6666C15 22.1143 15.4477 21.6666 16 21.6666H16.0133C16.5656 21.6666 17.0133 22.1143 17.0133 22.6666C17.0133 23.2189 16.5656 23.6666 16.0133 23.6666H16C15.4477 23.6666 15 23.2189 15 22.6666Z"
+                                          fill="white" />
+                                      </svg>
+                                    </div>
+                                    <div>
+                                      <h4 class="mb-0.5 text-title-xsm font-medium text-black dark:text-white">
+                                        Status
+                                      </h4>
+                                      <p class="text-sm font-medium " style="color: rgb(207, 38, 38);">
+                                        En retard !!
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+                                </div>
+                              </div>
+                            </span>
+
+                            {% elif task.is_overdue and task.completed or not task.is_overdue and task.completed %}
+                            <!-- Si le delai est depaser ou pas encore et la tache est Finis (marquer comme fini) -->
+
+                            <strong style="color: rgb(72, 255, 0);">
+
+                              <div class="max-w-[222px] rounded-lg py-4 dark:">
+                                <div class="flex items-center justify-between">
+                                  <div class="flex flex-grow items-center gap-5">
+                                    <div
+                                      class="flex h-10 w-full max-w-10 items-center justify-center rounded-full bg-[#1EA779]">
+                                      <svg width="20" height="16" viewBox="0 0 20 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                          d="M18.1264 2.27326C17.9391 2.06543 17.6448 2.06543 17.4574 2.27326L7.69058 12.7836C7.61031 12.8726 7.50327 12.8726 7.423 12.7836L2.5797 7.5581C2.39239 7.35027 2.09805 7.35027 1.91074 7.5581C1.72343 7.76593 1.72343 8.09252 1.91074 8.30035L6.75403 13.5258C6.9681 13.7633 7.26245 13.8821 7.53003 13.8821C7.82437 13.8821 8.09196 13.7633 8.30603 13.5258L18.0729 3.01551C18.287 2.80768 18.287 2.48109 18.1264 2.27326Z"
+                                          fill="white" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M19.0302 1.51876L19.0574 1.55404C19.5496 2.19109 19.5671 3.17716 18.9194 3.83286L9.17296 14.3212C8.74637 14.7905 8.16862 15.0586 7.53004 15.0586C6.93379 15.0586 6.3244 14.8022 5.88662 14.3206L1.03674 9.08806C0.446028 8.43262 0.446113 7.42591 1.03683 6.77048C1.68907 6.04677 2.79116 6.04419 3.44661 6.76274L7.55774 11.1983L16.5912 1.47722C17.2467 0.759356 18.3483 0.76216 19.0003 1.48564L19.0302 1.51876ZM2.5797 7.5581C2.39239 7.35027 2.09805 7.35027 1.91074 7.5581C1.747 7.73978 1.7264 8.01221 1.84893 8.21672C1.85132 8.22072 1.85377 8.22469 1.85627 8.22863C1.87221 8.25374 1.89037 8.27775 1.91074 8.30035L6.75403 13.5258C6.9681 13.7633 7.26245 13.8821 7.53003 13.8821C7.82437 13.8821 8.09196 13.7633 8.30603 13.5258L18.0729 3.01551C18.1038 2.98556 18.1302 2.95313 18.1523 2.91895C18.155 2.91483 18.1576 2.91069 18.1601 2.90652C18.2828 2.70529 18.261 2.44753 18.1264 2.27326C17.9391 2.06543 17.6448 2.06543 17.4574 2.27326L7.69058 12.7836C7.65639 12.8215 7.61735 12.8433 7.57759 12.8489C7.5706 12.8499 7.56359 12.8504 7.55658 12.8504C7.54772 12.8504 7.53886 12.8495 7.53004 12.8479C7.52377 12.8468 7.51753 12.8452 7.51133 12.8433C7.50632 12.8417 7.50132 12.8399 7.49637 12.8378C7.47058 12.8268 7.44571 12.8088 7.423 12.7836L2.5797 7.5581Z"
+                                          fill="white" />
+                                      </svg>
+                                    </div>
+                                    <div>
+                                      <h4 class="mb-0.5 text-title-xsm font-medium text-black dark:text-white">
+                                        Status
+                                      </h4>
+                                      <p class="text-sm font-medium" style="color: rgba(56, 79, 209, 0.705);">
+                                        Finie 💪
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+                                </div>
+                              </div>
+
+                            </strong>
+                            {% elif not task.is_overdue and not task.completed %}
+                            <!--Si le delai est n'est pas encore depasser et la tache n'est pas encore marquée comme lue-->
+
+                            <strong style="color: rgb(72, 255, 0);">
+
+                              <div class="max-w-[222px] rounded-lg py-4 dark:">
+                                <div class="flex items-center justify-between">
+                                  <div class="flex flex-grow items-center gap-5">
+                                    <div class="flex h-10 w-full max-w-10 items-center justify-center rounded-full ">
+
+                                      <div
+                                        class="flex size-12.5 items-center justify-center rounded-full  border-stroke dark:border-strokedark">
+                                        <div class="animate-spin">
+                                          <svg width="39" height="40" viewBox="0 0 49 50" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <mask id="path-1-inside-1_1881_16179" fill="white">
+                                              <path
+                                                d="M18.5503 49.3989C23.2997 50.4597 28.2554 50.1113 32.8097 48.3965C37.364 46.6816 41.3187 43.6748 44.1889 39.7449C47.0591 35.815 48.7199 31.1328 48.9676 26.2727C49.2153 21.4125 48.0392 16.5858 45.5834 12.3844C43.1277 8.18304 39.4991 4.78974 35.1428 2.62071C30.7865 0.451685 25.8918 -0.398759 21.0592 0.173693C16.2265 0.746144 11.666 2.7166 7.93703 5.84338C4.20803 8.97015 1.47267 13.1173 0.0664691 17.7761L5.29059 19.353C6.38986 15.711 8.52815 12.4691 11.4432 10.0248C14.3582 7.58057 17.9233 6.04021 21.7011 5.59272C25.4789 5.14522 29.3052 5.81003 32.7106 7.50561C36.116 9.20119 38.9526 11.8538 40.8723 15.1381C42.792 18.4224 43.7114 22.1956 43.5178 25.9949C43.3241 29.7942 42.0258 33.4543 39.7822 36.5264C37.5385 39.5986 34.4469 41.949 30.8868 43.2896C27.3266 44.6302 23.4525 44.9025 19.7398 44.0732L18.5503 49.3989Z" />
+                                            </mask>
+                                            <path
+                                              d="M18.5503 49.3989C23.2997 50.4597 28.2554 50.1113 32.8097 48.3965C37.364 46.6816 41.3187 43.6748 44.1889 39.7449C47.0591 35.815 48.7199 31.1328 48.9676 26.2727C49.2153 21.4125 48.0392 16.5858 45.5834 12.3844C43.1277 8.18304 39.4991 4.78974 35.1428 2.62071C30.7865 0.451685 25.8918 -0.398759 21.0592 0.173693C16.2265 0.746144 11.666 2.7166 7.93703 5.84338C4.20803 8.97015 1.47267 13.1173 0.0664691 17.7761L5.29059 19.353C6.38986 15.711 8.52815 12.4691 11.4432 10.0248C14.3582 7.58057 17.9233 6.04021 21.7011 5.59272C25.4789 5.14522 29.3052 5.81003 32.7106 7.50561C36.116 9.20119 38.9526 11.8538 40.8723 15.1381C42.792 18.4224 43.7114 22.1956 43.5178 25.9949C43.3241 29.7942 42.0258 33.4543 39.7822 36.5264C37.5385 39.5986 34.4469 41.949 30.8868 43.2896C27.3266 44.6302 23.4525 44.9025 19.7398 44.0732L18.5503 49.3989Z"
+                                              stroke="#3C50E0" stroke-width="14"
+                                              mask="url(#path-1-inside-1_1881_16179)" />
+                                          </svg>
+                                        </div>
+                                      </div>
+
+                                    </div>
+
+
+
+
+
+                                    <div>
+                                      <h4 class="mb-0.5 text-title-xsm font-medium text-black dark:text-white">
+                                        Status
+                                      </h4>
+                                      <p class="text-sm font-medium" style="color: rgb(164, 180, 13);">
+                                        En cours
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+                                </div>
+                              </div>
+                            </strong>
+
+                            {% endif %}
+                          </p>
+
+
+
+                          <label for="taskCheckbox3" class="cursor-pointer">
+                            <div class="relative flex items-center pt-0.5">
+                              <!--Condition pour marquer une tache comme fini -->
+                              {% if not task.completed %}
+                              <!--formulaire pour marquer une tache comme fini -->
+                              <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="task_id" value="{{ task.id }}">
+                                <button type="submit" name="complete_task"
+                                  class="inline-flex rounded bg-[#13C296] px-2 py-1 text-sm font-medium text-white hover:bg-opacity-90">Marquer
+                                  comme finie</button>
+
+                              </form>
+                              {% endif %}
+                            </div>
+                          </label>
+                        </h5>
+
+
+
+                        <div for="taskCheckbox2" class="">
+                          <!-- Permet d'afficher le contenu ou la description d'une tache-->
+                          <!-- et l'affichage est reduit qu'a dix mots pour ne pas saturer l'ecrant pour vous toutes une contennu il faut cliquer sur le boutton voir-->
+                          <p>{{ task.description|truncatewords:10 }}</p>
+
+                        </div>
+
+                        <div class="absolute right-4 top-4">
+
+                          <div x-data="{openDropDown: false}" class="relative">
+                            <button @click="openDropDown = !openDropDown">
+                              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                  d="M2.25 11.25C3.49264 11.25 4.5 10.2426 4.5 9C4.5 7.75736 3.49264 6.75 2.25 6.75C1.00736 6.75 0 7.75736 0 9C0 10.2426 1.00736 11.25 2.25 11.25Z"
+                                  fill="#98A6AD" />
+                                <path
+                                  d="M9 11.25C10.2426 11.25 11.25 10.2426 11.25 9C11.25 7.75736 10.2426 6.75 9 6.75C7.75736 6.75 6.75 7.75736 6.75 9C6.75 10.2426 7.75736 11.25 9 11.25Z"
+                                  fill="#98A6AD" />
+                                <path
+                                  d="M15.75 11.25C16.9926 11.25 18 10.2426 18 9C18 7.75736 16.9926 6.75 15.75 6.75C14.5074 6.75 13.5 7.75736 13.5 9C13.5 10.2426 14.5074 11.25 15.75 11.25Z"
+                                  fill="#98A6AD" />
+                              </svg>
+                            </button>
+                            <div x-show="openDropDown" @click.outside="openDropDown = false"
+                              class="absolute right-0 top-full z-40 w-40 space-y-1 rounded-sm border border-stroke bg-white p-1.5 shadow-default dark:border-strokedark dark:bg-boxdark">
+
+
+                              <div x-data="{popupOpen: false}">
+                                <!-- Permet d'afficher tout le contenu d'une tache et son titire dans une petite fenetre -->
+                                <button @click="popupOpen = true"
+                                  class="flex w-full items-center gap-2 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+                                  <svg class="fill-current" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                                      fill="" />
+                                    <path
+                                      d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                                      fill="" />
+                                  </svg>
+                                  Voir
+                                </button>
+
+                                <!-- ===== Task Popup Start ===== -->
+                                <div x-show="popupOpen" x-transition
+                                  class="fixed left-0 top-0 z-99999 flex h-screen w-full justify-center overflow-y-scroll bg-black/80 px-4 py-5">
+                                  <div @click.outside="popupOpen = false"
+                                    class="relative m-auto w-full max-w-180 rounded-sm border border-stroke bg-gray p-4 shadow-default dark:border-strokedark dark:bg-meta-4 sm:p-8 xl:p-10">
+                                    <button @click="popupOpen = false"
+                                      class="absolute right-1 top-1 sm:right-5 sm:top-5">
+                                      <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M11.8913 9.99599L19.5043 2.38635C20.032 1.85888 20.032 1.02306 19.5043 0.495589C18.9768 -0.0317329 18.141 -0.0317329 17.6135 0.495589L10.0001 8.10559L2.38673 0.495589C1.85917 -0.0317329 1.02343 -0.0317329 0.495873 0.495589C-0.0318274 1.02306 -0.0318274 1.85888 0.495873 2.38635L8.10887 9.99599L0.495873 17.6056C-0.0318274 18.1331 -0.0318274 18.9689 0.495873 19.4964C0.717307 19.7177 1.05898 19.9001 1.4413 19.9001C1.75372 19.9001 2.13282 19.7971 2.40606 19.4771L10.0001 11.8864L17.6135 19.4964C17.8349 19.7177 18.1766 19.9001 18.5589 19.9001C18.8724 19.9001 19.2531 19.7964 19.5265 19.4737C20.0319 18.9452 20.0245 18.1256 19.5043 17.6056L11.8913 9.99599Z"
+                                          fill="" />
+                                      </svg>
+                                    </button>
+
+                                    <label for="taskTitle"
+                                      class="mb-2.5 block font-medium text-black dark:text-white">{{task.title}}</label>
+                                    {{task.description}}
+                                  </div>
+                                </div>
+
+                                <!-- ===== Task Popup End ===== -->
+                              </div>
+
+                              <div x-data="{popupOpen: false}">
+                                <button @click="popupOpen = true"
+                                  class="flex w-full items-center gap-2 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4"
+                                  onclick="document.getElementById('update-form-{{ task.id }}').style.display='block'">
+
+                                  <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_62_9787)">
+                                      <path
+                                        d="M15.55 2.97499C15.55 2.77499 15.475 2.57499 15.325 2.42499C15.025 2.12499 14.725 1.82499 14.45 1.52499C14.175 1.24999 13.925 0.974987 13.65 0.724987C13.525 0.574987 13.375 0.474986 13.175 0.449986C12.95 0.424986 12.75 0.474986 12.575 0.624987L10.875 2.32499H2.02495C1.17495 2.32499 0.449951 3.02499 0.449951 3.89999V14C0.449951 14.85 1.14995 15.575 2.02495 15.575H12.15C13 15.575 13.725 14.875 13.725 14V5.12499L15.35 3.49999C15.475 3.34999 15.55 3.17499 15.55 2.97499ZM8.19995 8.99999C8.17495 9.02499 8.17495 9.02499 8.14995 9.02499L6.34995 9.62499L6.94995 7.82499C6.94995 7.79999 6.97495 7.79999 6.97495 7.77499L11.475 3.27499L12.725 4.49999L8.19995 8.99999ZM12.575 14C12.575 14.25 12.375 14.45 12.125 14.45H2.02495C1.77495 14.45 1.57495 14.25 1.57495 14V3.87499C1.57495 3.62499 1.77495 3.42499 2.02495 3.42499H9.72495L6.17495 6.99999C6.04995 7.12499 5.92495 7.29999 5.87495 7.49999L4.94995 10.3C4.87495 10.5 4.92495 10.675 5.02495 10.85C5.09995 10.95 5.24995 11.1 5.52495 11.1H5.62495L8.49995 10.15C8.67495 10.1 8.84995 9.97499 8.97495 9.84999L12.575 6.24999V14ZM13.5 3.72499L12.25 2.49999L13.025 1.72499C13.225 1.92499 14.05 2.74999 14.25 2.97499L13.5 3.72499Z"
+                                        fill="" />
+                                    </g>
+                                    <defs>
+                                      <clipPath id="clip0_62_9787">
+                                        <rect width="16" height="16" fill="white" />
+                                      </clipPath>
+                                    </defs>
+                                  </svg>
+                                  <!--Permet de faire la mise a jour d'une tache-->
+                                  Editer
+                                </button>
+
+                                <!-- ===== Task Popup Start ===== -->
+                                <div x-show="popupOpen" x-transition
+                                  class="fixed left-0 top-0 z-99999 flex h-screen w-full justify-center overflow-y-scroll bg-black/80 px-4 py-5">
+                                  <div @click.outside="popupOpen = false"
+                                    class="relative m-auto w-full max-w-180 rounded-sm border border-stroke bg-gray p-4 shadow-default dark:border-strokedark dark:bg-meta-4 sm:p-8 xl:p-10">
+                                    <button @click="popupOpen = false"
+                                      class="absolute right-1 top-1 sm:right-5 sm:top-5">
+                                      <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                          d="M11.8913 9.99599L19.5043 2.38635C20.032 1.85888 20.032 1.02306 19.5043 0.495589C18.9768 -0.0317329 18.141 -0.0317329 17.6135 0.495589L10.0001 8.10559L2.38673 0.495589C1.85917 -0.0317329 1.02343 -0.0317329 0.495873 0.495589C-0.0318274 1.02306 -0.0318274 1.85888 0.495873 2.38635L8.10887 9.99599L0.495873 17.6056C-0.0318274 18.1331 -0.0318274 18.9689 0.495873 19.4964C0.717307 19.7177 1.05898 19.9001 1.4413 19.9001C1.75372 19.9001 2.13282 19.7971 2.40606 19.4771L10.0001 11.8864L17.6135 19.4964C17.8349 19.7177 18.1766 19.9001 18.5589 19.9001C18.8724 19.9001 19.2531 19.7964 19.5265 19.4737C20.0319 18.9452 20.0245 18.1256 19.5043 17.6056L11.8913 9.99599Z"
+                                          fill="" />
+                                      </svg>
+                                    </button>
+                                    <div id="update-form-{{ task.id }}" style="display:none;">
+
+
+                                      <form method="post">
+                                        <!--Formulaire pour faire la mise a jour d'une tache-->
+                                        {% csrf_token %}
+
+                                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                                        {{ form.as_p }}
+                                        <button type="submit" name="update_task"
+                                          class="flex w-full items-center justify-center gap-2 rounded bg-primary px-4.5 py-2.5 font-medium text-white">Mettre
+                                          a jour</button>
+                                      </form>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+
+
+                              <form method="post">
+
+                                <!-- Suppression d'une tache-->
+
+                                {% csrf_token %}
+
+                                <input type="hidden" name="task_id" value="{{ task.id }}">
+
+                                <button name="delete_task" type="submit"
+                                  class="flex w-full items-center gap-2 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+                                  <svg class="fill-current" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M12.225 2.20005H10.3V1.77505C10.3 1.02505 9.70005 0.425049 8.95005 0.425049H7.02505C6.27505 0.425049 5.67505 1.02505 5.67505 1.77505V2.20005H3.75005C3.02505 2.20005 2.42505 2.80005 2.42505 3.52505V4.27505C2.42505 4.82505 2.75005 5.27505 3.22505 5.47505L3.62505 13.75C3.67505 14.775 4.52505 15.575 5.55005 15.575H10.4C11.425 15.575 12.275 14.775 12.325 13.75L12.75 5.45005C13.225 5.25005 13.55 4.77505 13.55 4.25005V3.50005C13.55 2.80005 12.95 2.20005 12.225 2.20005ZM6.82505 1.77505C6.82505 1.65005 6.92505 1.55005 7.05005 1.55005H8.97505C9.10005 1.55005 9.20005 1.65005 9.20005 1.77505V2.20005H6.85005V1.77505H6.82505ZM3.57505 3.52505C3.57505 3.42505 3.65005 3.32505 3.77505 3.32505H12.225C12.325 3.32505 12.425 3.40005 12.425 3.52505V4.27505C12.425 4.37505 12.35 4.47505 12.225 4.47505H3.77505C3.67505 4.47505 3.57505 4.40005 3.57505 4.27505V3.52505V3.52505ZM10.425 14.45H5.57505C5.15005 14.45 4.80005 14.125 4.77505 13.675L4.40005 5.57505H11.625L11.25 13.675C11.2 14.1 10.85 14.45 10.425 14.45Z"
+                                      fill="" />
+                                    <path
+                                      d="M8.00005 8.1001C7.70005 8.1001 7.42505 8.3501 7.42505 8.6751V11.8501C7.42505 12.1501 7.67505 12.4251 8.00005 12.4251C8.30005 12.4251 8.57505 12.1751 8.57505 11.8501V8.6751C8.57505 8.3501 8.30005 8.1001 8.00005 8.1001Z"
+                                      fill="" />
+                                    <path
+                                      d="M9.99994 8.60004C9.67494 8.57504 9.42494 8.80004 9.39994 9.12504L9.24994 11.325C9.22494 11.625 9.44994 11.9 9.77494 11.925C9.79994 11.925 9.79994 11.925 9.82494 11.925C10.1249 11.925 10.3749 11.7 10.3749 11.4L10.5249 9.20004C10.5249 8.87504 10.2999 8.62504 9.99994 8.60004Z"
+                                      fill="" />
+                                    <path
+                                      d="M5.97497 8.60004C5.67497 8.62504 5.42497 8.90004 5.44997 9.20004L5.62497 11.4C5.64997 11.7 5.89997 11.925 6.17497 11.925C6.19997 11.925 6.19997 11.925 6.22497 11.925C6.52497 11.9 6.77497 11.625 6.74997 11.325L6.57497 9.12504C6.57497 8.80004 6.29997 8.57504 5.97497 8.60004Z"
+                                      fill="" />
+                                  </svg>
+                                  Effacer
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+                </li>
+                {% empty %}
+
+                <!--Si aucune tache est dans la base de donnée -->
+
+                <div
+                  class="rounded-sm w-max grid grid-cols-1 sm:grid-cols-2 border border-stroke bg-white px-5 py-10 shadow-default dark:border-strokedark dark:bg-boxdark sm:py-20 ">
+                  <div class="mx-auto max-w-[490px]">
+                    <!-- <img class="w-max" src="{% static 'src/images/illustration/illustration-02.svg' %}" alt="illustration" />-->
+                    <img src="{% static 'src/images/illustration/illustration-01.svg' %}" alt="illustration">
+                    <div class="mt-7.5 text-center">
+                      <h2 class="mb-3 text-2xl font-bold text-black dark:text-white">
+                        Aucune Tache Disponible
+                      </h2>
+                      <p class="font-medium">
+                        Ciquer sur le boutton bleu <strong>ajouter une tache </strong> en haut a droite de l'ecran pour
+                        ajouter nouvelle une tache. <br> <br>
+                        besoin d'aide ?<br> cliquer sur
+                        <strong>Aide</strong> en bas de du site pour quelque consils une assistance.
+                      </p>
+
+                    </div>
+                  </div>
+                </div>
+
+                {% endfor %}
+              </div>
+            </ul>
+            <!-- Task List Wrapper End -->
+          </div>
+        </div>
+
+
+
+      </main>
+
+      <footer>
+        <section class="">
+          <div class="max-w-screen-xl px-4 py-8 mx-auto space-y-8 overflow-hidden sm:px-6 lg:px-8 gap-10">
+            <nav class="flex flex-wrap justify-center -mx-5 -my-2">
+              <div class="px-5 py-2 ">
+                <!--  <a href="#" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                  About
+                </a>-->
+                <div class="">
+                  <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                    <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                    <button @click="popupOpen = true"
+                      class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                      A propos
+                    </button>
+
+                    <!-- ===== Task Popup Start ===== -->
+                    <div x-show="popupOpen" x-transition
+                      class="fixed left-0 top-0 z-99999 flex h-screen w-full justify-center overflow-y-scroll bg-black/80 px-4 py-5">
+                      <div @click.outside="popupOpen = false"
+                        class="relative m-auto w-full max-w-180 rounded-sm border border-stroke bg-gray p-4 shadow-default dark:border-strokedark dark:bg-meta-4 sm:p-8 xl:p-10">
+                        <button @click="popupOpen = false" class="absolute right-1 top-1 sm:right-5 sm:top-5">
+                          <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M11.8913 9.99599L19.5043 2.38635C20.032 1.85888 20.032 1.02306 19.5043 0.495589C18.9768 -0.0317329 18.141 -0.0317329 17.6135 0.495589L10.0001 8.10559L2.38673 0.495589C1.85917 -0.0317329 1.02343 -0.0317329 0.495873 0.495589C-0.0318274 1.02306 -0.0318274 1.85888 0.495873 2.38635L8.10887 9.99599L0.495873 17.6056C-0.0318274 18.1331 -0.0318274 18.9689 0.495873 19.4964C0.717307 19.7177 1.05898 19.9001 1.4413 19.9001C1.75372 19.9001 2.13282 19.7971 2.40606 19.4771L10.0001 11.8864L17.6135 19.4964C17.8349 19.7177 18.1766 19.9001 18.5589 19.9001C18.8724 19.9001 19.2531 19.7964 19.5265 19.4737C20.0319 18.9452 20.0245 18.1256 19.5043 17.6056L11.8913 9.99599Z"
+                              fill="" />
+                          </svg>
+
+                        </button>
+
+                        <label for="taskTitle" class="mb-2.5 block font-medium text-black dark:text-white">A
+                          propos</label>
+                        <p>
+                          Cette application a ete creer par <strong>KETTEGUIA Nicefort Gilchrist</strong> etudiant en 3e
+                          années de reseaux et systemes Informatique
+                          à l'Instut Superieur de Technologie à l'universite de Bangui. <br> <br>
+                          Elle permet de creer, de surveiller et de gerer automatiquement l'avancement des taches. <br>
+                          <br>
+                          Et peut afficher la page web de notre site sous deux themes (sombre et clair).
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- ===== Task Popup End ===== -->
+                  </div>
+                </div>
+              </div>
+              <div class="px-5 py-2">
+
+                <div class="">
+                  <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                    <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                    <button @click="popupOpen = true"
+                      class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                      Blog
+                    </button>
+
+                    {% include "./maintenace.html" %}
+                  </div>
+                </div>
+
+                <div class="px-5 py-2 ">
+                  <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                    <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                    <button @click="popupOpen = true"
+                      class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                      Aide
+                    </button>
+
+                    <!-- ===== Task Popup Start ===== -->
+                    <!--Permet de faire resortir l'aide sur une fenetre-->
+                    <div x-show="popupOpen" x-transition
+                      class="fixed left-0 top-0 z-99999 flex h-screen w-full justify-center overflow-y-scroll bg-black/80 px-4 py-5">
+                      <div @click.outside="popupOpen = false"
+                        class="relative m-auto w-full max-w-180 rounded-sm border border-stroke bg-gray p-4 shadow-default dark:border-strokedark dark:bg-meta-4 sm:p-8 xl:p-10">
+                        <button @click="popupOpen = false" class="absolute right-1 top-1 sm:right-5 sm:top-5">
+                          <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M11.8913 9.99599L19.5043 2.38635C20.032 1.85888 20.032 1.02306 19.5043 0.495589C18.9768 -0.0317329 18.141 -0.0317329 17.6135 0.495589L10.0001 8.10559L2.38673 0.495589C1.85917 -0.0317329 1.02343 -0.0317329 0.495873 0.495589C-0.0318274 1.02306 -0.0318274 1.85888 0.495873 2.38635L8.10887 9.99599L0.495873 17.6056C-0.0318274 18.1331 -0.0318274 18.9689 0.495873 19.4964C0.717307 19.7177 1.05898 19.9001 1.4413 19.9001C1.75372 19.9001 2.13282 19.7971 2.40606 19.4771L10.0001 11.8864L17.6135 19.4964C17.8349 19.7177 18.1766 19.9001 18.5589 19.9001C18.8724 19.9001 19.2531 19.7964 19.5265 19.4737C20.0319 18.9452 20.0245 18.1256 19.5043 17.6056L11.8913 9.99599Z"
+                              fill="" />
+                          </svg>
+
+                        </button>
+
+                        <label for="taskTitle" class="mb-2.5 block font-medium text-black dark:text-white">Aide</label>
+                        1- Pour <strong>creer une Tache</strong> apuyer sur le boutton bleu en haut a gauche <br> <br>
+                        2- Pour <strong>modifier(recreer une meme tache)</strong> une tache cliquer sur l'icon de trois
+                        de point en haut
+                        a gauche de la tache de la tache concernée et choisser l'option <strong>editer</strong>. <br>
+                        <br>
+                        3- Pour <strong>Voir le contennu generale</strong> d'une tache cliquer sur l'icon de trois de
+                        point en haut
+                        a gauche de la tache de la tache concernée et choisser l'option voir. <br> <br>
+                        4- Pour <strong>supprimer une tache</strong> cliquer sur l'icon de trois de point en haut
+                        gauche de la tache de la tache concernée et choisser l'option supprimer. <br> <br>
+                        5- Pour <strong>changer le mode d'affichage</strong> du site (/clair ou sombre) cliquer sur le
+                        petit boutton rond en haut du
+                        gros boutton bleu (ajouter une tache) <br> <br>
+                        6-Pour <strong>marquer une tache comme finie</strong> Cliquer sur le bouton vert marquer comme
+                        finie <br> <br> <br>
+
+                        <p>
+                          Les couleurs des titres representent les priorités des taches <br>
+                          Violet: pour faible (low) <br>
+                          Vert : pour moyenne (medium) <br>
+                          Rouge : pour elevee (high)</p> <br>
+
+                        <p>
+                          Pour creer une tache seul le titre est obligatoire mais vous choisissez de mettre les dates
+                          ils faut aussi choisr les heures. <br>
+                          Et l'ors de la creation ou de la modificatoin d'une tache il ne faut pas crochez la case
+                          <span>Combleted</span> car cela marquera
+                          la fin de la tache juste avant sa création ce qui n'aura pas assez de sens. <br> <br>
+                        </p>
+
+                        <p>
+                          Si La solution a votre probleme ne se trouve pas parmis les aides ci-dessus vous pouvez
+                          consulter notre <strong>blog </strong> ou contacter l'adminastratuer
+                          en cliquant sur les icons des medias sociaux en bas du site ou envoyer un mail directement à
+                          <a class="font-medium"
+                            href="mailto:nicefortketeguia@gmail.com "><strong>nicefortketeguia@gmail.com </strong></a>
+                          en cliquant sur l'icone de mail en bas à droite.
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <!-- ===== Task Popup End ===== -->
+                  </div>
+                </div>
+
+
+
+
+
+
+
+            </nav>
+            <div class="flex justify-center mt-8 space-x-6 gap-10 mb-4">
+
+              <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                <button @click="popupOpen = true"
+                  class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </button>
+
+                {% include "./maintenace.html" %}
+
+
+                <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                  <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                  <button @click="popupOpen = true"
+                    class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                  {% include "./maintenace.html" %}
+
+
+
+
+                  <!--<a href="#" class="text-gray-400 hover:text-gray-500">
+                <span class="sr-only">Twitter</span>
+                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84">
+                  </path>
+                </svg>
+              </a>-->
+                  <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                    <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                    <button @click="popupOpen = true"
+                      class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                      <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84">
+                        </path>
+                      </svg>
+                    </button>
+                    {% include "./maintenace.html" %}
+
+
+
+                    <div x-data="{popupOpen: false}" class="text-base leading-6 text-gray-500 hover:text-gray-900">
+                      <!-- Permet d'afficher l'aide dans une petite fenetre -->
+                      <button @click="popupOpen = true"
+                        class="flex w-full items-center gap-1 rounded-sm px-4 py-1.5 text-left text-sm hover:bg-gray dark:hover:bg-meta-4">
+
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                          <path fill-rule="evenodd"
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                            clip-rule="evenodd"></path>
+                        </svg>
+                      </button>
+                      {% include "./maintenace.html" %}
+
+                      <!-- Envoie un mail a nicefortketeguia@gamilcom-->
+                      <a href="mailto:nicefortketeguia@gmail.com" class="text-gray-400 hover:text-gray-500">
+                        <span class="sr-only">Mail</span>
+                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg">
+
+                          <g opacity="1">
+                            <path
+                              d="M19.2516 3.30005H2.75156C1.58281 3.30005 0.585938 4.26255 0.585938 5.46567V16.6032C0.585938 17.7719 1.54844 18.7688 2.75156 18.7688H19.2516C20.4203 18.7688 21.4172 17.8063 21.4172 16.6032V5.4313C21.4172 4.26255 20.4203 3.30005 19.2516 3.30005ZM19.2516 4.84692C19.2859 4.84692 19.3203 4.84692 19.3547 4.84692L11.0016 10.2094L2.64844 4.84692C2.68281 4.84692 2.71719 4.84692 2.75156 4.84692H19.2516ZM19.2516 17.1532H2.75156C2.40781 17.1532 2.13281 16.8782 2.13281 16.5344V6.35942L10.1766 11.5157C10.4172 11.6875 10.6922 11.7563 10.9672 11.7563C11.2422 11.7563 11.5172 11.6875 11.7578 11.5157L19.8016 6.35942V16.5688C19.8703 16.9125 19.5953 17.1532 19.2516 17.1532Z"
+                              fill="" />
+                          </g>
+                        </svg>
+
+                      </a>
+
+
+                    </div>
+                    <p class="mt-8 text-base leading-6 text-center text-gray-400">
+                      © 2024 Nicefort KETTEGUIA, Inc. All rights reserved.
+                    </p>
+                  </div>
+        </section>
+
+
+
+      </footer>
+
+      <!-- ===== Main Content End ===== -->
+
+
+
+    </div>
+    <!-- ===== Content Area End ===== -->
+
+
+
+  </div>
+  <!-- ===== Page Wrapper End ===== -->
+  <script defer src="{% static 'src/js/bundle.js'%}"></script>
+
+  <script>
+
+    //Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder = '';
+    form_fields[2].placeholder = '';
+    form_fields[3].placeholder = '';
+    form_fields[4].placeholder = '';
+
+    var textarea_fields = document.getElementsByTagName('textarea')
+
+    var select_fields = document.getElementsByTagName('select')
+
+    for (var field in select_fields) {
+      select_fields[field].className += 'relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary mb-5 dark:text-white  bg-white px-4.5 py-3 text-black '
+    }
+
+
+    for (var field in textarea_fields) {
+      textarea_fields[field].className += 'w-full rounded-sm border border-stroke bg-white px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-boxdark dark:text-white dark:focus:border-primary'
+    }
+
+    for (var field in form_fields) {
+      form_fields[field].className += ' w-full rounded-sm border border-stroke bg-white px-4.5 py-3 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-boxdark dark:text-white dark:focus:border-primary'
+    }
+  </script>
+</body>
+
+<!-- Mirrored from demo.tailadmin.com/task-kanban by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 03 Jun 2024 00:11:42 GMT -->
+
+</html>
